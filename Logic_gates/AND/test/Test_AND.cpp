@@ -1,5 +1,5 @@
 #include <systemc.h>
-#include "AND_GATE.cpp" // include module (hoặc dùng .h nếu có)
+#include "AND_GATE.h"
 
 int sc_main(int argc, char* argv[]) {
     sc_signal<bool> a, b, c;
