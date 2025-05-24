@@ -65,3 +65,13 @@ Sau khi build thành công, chạy ứng dụng bằng:
 Đảm bảo bạn đã thiết lập biến môi trường SYSTEMC_HOME nếu dùng CMake.
 
 Nếu có thư viện ngoài (ví dụ: ASCON, LoRa...), cần cập nhật CMakeLists.txt cho phù hợp.
+
+📈 Xem tín hiệu mô phỏng (waveform)
+File wave.vcd sẽ được tạo trong quá trình chạy mô phỏng nếu bạn dùng sc_trace.
+
+▶️ Mở file .vcd bằng GTKWave:
+
+```bash
+gtkwave wave.vcd
+```
+Nếu bạn đang dùng Windows, có thể mở trực tiếp bằng phần mềm GTKWave đã cài từ: http://gtkwave.sourceforge.net/
