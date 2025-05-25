@@ -28,6 +28,24 @@ else
 SRC := $(TARGET_TYPE)/$(TARGET_MODULE)/src/$(TARGET_MODULE).cpp
 TEST := Test/$(TARGET_TYPE)/$(TARGET_MODULE)/test_$(TARGET_MODULE).cpp
 endif
+
+# ==== Auto-detect includes from source and test ====
+INCLUDED_HEADERS := $(shell grep -h '^#include "' $(SRC) $(TEST) | sed 's/#include "\(.*\)"/\1/' | cut -d. -f1)
+DEPENDENCIES := $(sort $(INCLUDED_HEADERS))
+
+# ==== Generate include paths and source files from auto-detected dependencies ====
+DEP_INC := $(foreach dep,$(DEPENDENCIES),\
+	$(if $(wildcard Logic_gates/$(dep)/include/$(dep)_GATE.h),-ILogic_gates/$(dep)/include,\
+	$(if $(wildcard Components/$(dep)/include/$(dep).h),-IComponents/$(dep)/include,)\
+))
+
+DEP_SRC := $(foreach dep,$(DEPENDENCIES),\
+	$(if $(wildcard Logic_gates/$(dep)/src/$(dep)_GATE.cpp),Logic_gates/$(dep)/src/$(dep)_GATE.cpp,\
+	$(if $(wildcard Components/$(dep)/src/$(dep).cpp),Components/$(dep)/src/$(dep).cpp,)\
+))
+INCLUDES += -I$(INC_DIR) $(DEP_INC)
+ALL_SRC := $(SRC) $(DEP_SRC) $(TEST)
+
 OBJECTS := $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRC) $(GATE_SRC) $(TEST))
 TARGET := $(BUILD_DIR)/test_$(shell echo $(TARGET_MODULE) | tr A-Z a-z)
 
