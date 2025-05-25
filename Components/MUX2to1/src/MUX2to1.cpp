@@ -9,6 +9,10 @@ MUX2to1::MUX2to1(sc_core::sc_module_name name)
     connect_modules();
 }
 
+MUX2to1::~MUX2to1() {
+
+}
+
 void MUX2to1::connect_modules() {
     // Connect NOT sel
     not_gate.A(sel);

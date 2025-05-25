@@ -20,6 +20,7 @@ SC_MODULE(MUX2to1) {
 
     // Constructor declaration only
     SC_CTOR(MUX2to1);
+    ~MUX2to1();
 
 private:
     void connect_modules();
