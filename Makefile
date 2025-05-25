@@ -9,20 +9,25 @@ INCLUDES := -I$(SYSTEMC_DIR)/include
 LIBS := -L$(SYSTEMC_DIR)/lib-linux64 -lsystemc -lm -pthread
 
 # ==== Paths ====
-MODULE_DIR := Components/$(TARGET_MODULE)
-TEST_DIR := Test/Components/$(TARGET_MODULE)
+MODULE_DIR := $(TARGET_TYPE)/$(TARGET_MODULE)
+TEST_DIR := Test/$(TARGET_TYPE)/$(TARGET_MODULE)
 BUILD_DIR := build
 SRC_DIR := $(MODULE_DIR)/src
 INC_DIR := $(MODULE_DIR)/include
 
 # ==== Logic Gate dependencies ====
-GATES := AND OR NOT
+GATES := AND OR NOT NAND NOR XOR XNOR
 GATE_SRC := $(foreach gate, $(GATES), Logic_gates/$(gate)/src/$(gate)_GATE.cpp)
 GATE_INC := $(foreach gate, $(GATES), -ILogic_gates/$(gate)/include)
 
 # ==== Sources ====
-SRC := $(SRC_DIR)/$(TARGET_MODULE).cpp
-TEST := $(TEST_DIR)/test_$(TARGET_MODULE).cpp
+ifeq ($(TARGET_TYPE), Logic_gates)
+SRC := $(TARGET_TYPE)/$(TARGET_MODULE)/src/$(TARGET_MODULE)_GATE.cpp
+TEST := Test/$(TARGET_TYPE)/$(TARGET_MODULE)/Test_$(TARGET_MODULE).cpp
+else
+SRC := $(TARGET_TYPE)/$(TARGET_MODULE)/src/$(TARGET_MODULE).cpp
+TEST := Test/$(TARGET_TYPE)/$(TARGET_MODULE)/test_$(TARGET_MODULE).cpp
+endif
 OBJECTS := $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRC) $(GATE_SRC) $(TEST))
 TARGET := $(BUILD_DIR)/test_$(shell echo $(TARGET_MODULE) | tr A-Z a-z)
 
@@ -63,4 +68,4 @@ help:
 	@echo "  make clean   → Xoá file build"
 	@echo "  make help    → Hiển thị hướng dẫn"
 	@echo ""
-	@echo "📦 Module đang build: $(TARGET_MODULE) (xem config.mk)"
+	@echo "📦 Module đang build: $(TARGET_MODULE) (type: $(TARGET_TYPE)) - xem trong build_config.mk"
