@@ -1,4 +1,4 @@
-#include <systemc.h>
+x#include <systemc.h>
 #include "XOR_GATE.h"
 
 int sc_main(int argc, char* argv[]) {
